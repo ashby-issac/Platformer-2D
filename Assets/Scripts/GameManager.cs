@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
     public Action OnGameRestart;
     public Action OnRestartEnemy;
     public Action OnLevelComplete;
+    public Action OnRestartResetUI;
+    public Action OnHealthPickup;
 
     void Awake()
     {
@@ -62,24 +64,23 @@ public class GameManager : MonoBehaviour
             case CollectibleType.Coin:
                 UIManager.Instance.DisplayCoinUI(count);
                 break;
+            case CollectibleType.Heart:
+                UIManager.Instance.AddHealthUI();
+                break;
             default:
                 break;
         }
     }
 
-    public void OnGamerOver()
-    {
-        UIManager.Instance.SetGameOverPanelState(true);
-    }
+    public void OnGamerOver() => UIManager.Instance.SetGameOverPanelState(true);
 
-    public void RestartLevel()
-    {
-        Invoke("Reset", 2f);
-    }
+    public void RestartLevel() => Invoke("Reset", 3f);
 
+    // Called through Invoke
     private void Reset()
     {
-        OnGameRestart();
+        OnGameRestart?.Invoke();
+        OnRestartResetUI?.Invoke();
 
         foreach (List<Collectible> collectibleList in collectibles.Values)
             foreach (Collectible collectible in collectibleList)
@@ -89,18 +90,25 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.SetGameOverPanelState(false);
     }
 
-    public void OnContinueClicked()
-    {
-        Invoke("LoadNextLevel", 2f);
-    }
-
+    public void OnContinueClicked() => Invoke("LoadNextLevel", 2f);
+    
+    // Called through Invoke
     private void LoadNextLevel()
     {
         collectibles.Clear();
         gameData.ClearEnemyData();
 
+        OnRestartResetUI?.Invoke();
+
         platforms[levelIndex].SetActive(false);
         levelIndex++;
+
+        if (levelIndex == platforms.Length)
+        {
+            return;
+        }
         platforms[levelIndex].SetActive(true);
+        
+        OnLevelComplete?.Invoke();
     }
 }

@@ -12,26 +12,24 @@ public class PlayerHealth : Health
     private bool hitObstacle = false;
 
     public static bool IsAlive = false;
+    public static bool IsFull = true;
 
     public delegate void PlayerDamagedHandler(float currentHealth, float maxHealth);
     public static event PlayerDamagedHandler OnPlayerDamaged;
-
-    public delegate void PlayerPickup();
-    public static event PlayerPickup OnPlayerPickup;
 
     new void OnEnable()
     {
         base.OnEnable();
         IsAlive = true;
-
-        GameManager.Instance.OnGameRestart -= PlayerReset;
+        
         transform.position = GameManager.Instance.CurrentLevelPlayerPos;
 
         UIManager.Instance.SetHealthIndex(currentHealth);
-        EnemyMechanics.OnEnemyAttack += ReduceHealth;
-
+        
+        GameManager.Instance.OnGameRestart -= PlayerReset;
         OnPlayerDamaged += UIManager.Instance.ReduceHealthUI;
-        OnPlayerPickup += UIManager.Instance.AddHealthUI;
+        EnemyMechanics.OnEnemyAttack += ReduceHealth;
+        GameManager.Instance.OnHealthPickup += AddHealth;
 
         GameManager.Instance.GameData.SetPlayerStartPos(this, transform.position);
     }
@@ -62,20 +60,18 @@ public class PlayerHealth : Health
     {
         EnemyMechanics.OnEnemyAttack -= ReduceHealth;
         OnPlayerDamaged -= UIManager.Instance.ReduceHealthUI;
-        OnPlayerPickup -= UIManager.Instance.AddHealthUI;
 
         GameManager.Instance.OnGameRestart += PlayerReset;
+        GameManager.Instance.OnLevelComplete += () => gameObject.SetActive(true);
+        GameManager.Instance.OnHealthPickup -= AddHealth;
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void AddHealth()
     {
-        if (currentHealth < maxHealth && collision.gameObject.tag == "Heart" && !hitObstacle)
-        {
-            collision.gameObject.SetActive(false);
-            OnPlayerPickup?.Invoke();
+        if (currentHealth < maxHealth)
             currentHealth++;
-            hitObstacle = true;
-        }
+
+        IsFull = currentHealth == maxHealth;
     }
 
     private void ReduceHealth(PlayerHealth playerHealth)
@@ -83,6 +79,7 @@ public class PlayerHealth : Health
         if (playerHealth == this)
         {
             currentHealth--;
+            IsFull = false;
             if (currentHealth < 1)
             {
                 playerAnimations?.PlayDeathAnim(false);
@@ -96,7 +93,7 @@ public class PlayerHealth : Health
 
     void PlayerReset()
     {
-        gameObject.transform.position = GameManager.Instance.GameData.GetPlayerStartPos(this); // use data from SO
+        gameObject.transform.position = GameManager.Instance.GameData.GetPlayerStartPos(this); 
         gameObject.SetActive(true);
     }
 

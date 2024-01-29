@@ -7,7 +7,8 @@ using UnityEngine;
 public enum CollectibleType
 {
 	Orb,
-	Coin
+	Coin,
+	Heart
 }
 
 public class Collectible : MonoBehaviour
@@ -21,7 +22,19 @@ public class Collectible : MonoBehaviour
 		if (collision.gameObject.tag != "Player")
 			return;
 
-		gameObject.SetActive(false);
+		if (type == CollectibleType.Heart)
+		{ 
+			if (PlayerHealth.IsFull)
+			{
+				return;
+			}
+			else
+			{
+				GameManager.Instance.OnHealthPickup?.Invoke();
+			}
+		}
+
+        gameObject.SetActive(false);
 		GameManager.Instance.AddCollectible(CollectibleType, this, 1);
-	}
+    }
 }

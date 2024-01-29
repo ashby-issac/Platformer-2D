@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 855478143892257901}
   - component: {fileID: 5111393990598828102}
   - component: {fileID: 4448910960890481340}
+  - component: {fileID: 3266895388362187810}
   m_Layer: 10
   m_Name: Heart
   m_TagString: Heart
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 226415379
-  m_SortingLayer: 9
+  m_SortingLayer: 10
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 269501ddd715ccb4b9b3003bc1ad8ab3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -130,3 +131,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 12.8, y: 12.8}
   m_EdgeRadius: 0
+--- !u!114 &3266895388362187810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7768250701802613218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a256cb7395d1e4cb993cd432674e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 2

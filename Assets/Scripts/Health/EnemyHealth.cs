@@ -43,7 +43,6 @@ public class EnemyHealth : Health
 
     void OnDisable()
     {
-        enemyRb.bodyType = RigidbodyType2D.Static;
         PlayerMechanics.OnPlayerAttack -= ReduceHealth;
         GameManager.Instance.OnRestartEnemy += ResetEnemy;
     }
@@ -55,6 +54,7 @@ public class EnemyHealth : Health
             currentHealth--;
             if (currentHealth < 1)
             {
+                enemyRb.bodyType = RigidbodyType2D.Static;
                 enemyAnimations.PlayDeathAnim(false);
                 Invoke("DisableObj", 3f);
                 IsAlive = false;
