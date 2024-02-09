@@ -231,6 +231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30913ff0d38688d45b7d89555d88eb82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  capsuleCollider: {fileID: 5447279737257630665}
+  rb: {fileID: 4431248435645036539}
   hazardsLayer:
     serializedVersion: 2
     m_Bits: 512

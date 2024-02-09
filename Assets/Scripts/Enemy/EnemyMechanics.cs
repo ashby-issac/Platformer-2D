@@ -39,7 +39,6 @@ public class EnemyMechanics : MonoBehaviour
 
         distToPlayer = DistToPlayer;
         var yDist = Mathf.Abs(playerTransform.position.y - transform.position.y);
-        //Debug.Log($":: Dist: {yDist}");
         if (distToPlayer < 10f && yDist < 0.5f)
         {
             AttackPlayer();

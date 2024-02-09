@@ -2,7 +2,7 @@
 
 public class EnemyAnimations : MonoBehaviour
 {
-    Animator animator;
+    [SerializeField] private Animator animator;
 
     void Start() => animator = GetComponent<Animator>();
 

@@ -4,26 +4,24 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    protected Rigidbody2D enemyRb;
-    protected CapsuleCollider2D capsuleCollider;
-
+    [SerializeField] protected CapsuleCollider2D capsuleCollider;
+    [SerializeField] protected Rigidbody2D rb;
     [SerializeField] protected LayerMask hazardsLayer;
-    [SerializeField] protected float maxHealth; // 3 hearts
+    [SerializeField] protected float maxHealth;
     [SerializeField] protected float damageHit;
 
-    protected float currentHealth; // 3 hearts
+    protected float currentHealth;
     protected bool isOnHazard = false;
 
     protected void OnEnable()
     {
         currentHealth = maxHealth;
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     protected void Start()
     {
-        enemyRb = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
-        enemyRb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     protected bool IsTouchingHazard()

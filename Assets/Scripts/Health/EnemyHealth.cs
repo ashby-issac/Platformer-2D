@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : Health
 {
-    private EnemyAnimations enemyAnimations;
+    [SerializeField] private EnemyAnimations enemyAnimations;
     private bool hitObstacle = false;
 
     public bool IsAlive { get; private set; }
@@ -15,9 +15,9 @@ public class EnemyHealth : Health
         IsAlive = true;
         
         PlayerMechanics.OnPlayerAttack += ReduceHealth;
-        GameManager.Instance.OnRestartEnemy -= ResetEnemy;
+        GameController.Instance.OnRestartEnemy -= ResetEnemy;
 
-        GameManager.Instance.GameData.SetEnemyPos(this, gameObject.transform.position);
+        GameController.Instance.GameData.SetEnemyPos(this, gameObject.transform.position);
     }
 
     new void Start()
@@ -44,7 +44,7 @@ public class EnemyHealth : Health
     void OnDisable()
     {
         PlayerMechanics.OnPlayerAttack -= ReduceHealth;
-        GameManager.Instance.OnRestartEnemy += ResetEnemy;
+        GameController.Instance.OnRestartEnemy += ResetEnemy;
     }
 
     private void ReduceHealth(EnemyHealth enemyHealth)
@@ -54,8 +54,8 @@ public class EnemyHealth : Health
             currentHealth--;
             if (currentHealth < 1)
             {
-                enemyRb.bodyType = RigidbodyType2D.Static;
-                enemyAnimations.PlayDeathAnim(false);
+                rb.bodyType = RigidbodyType2D.Static;
+                enemyAnimations?.PlayDeathAnim(false);
                 Invoke("DisableObj", 3f);
                 IsAlive = false;
             }
@@ -66,10 +66,9 @@ public class EnemyHealth : Health
 
     void ResetEnemy()
     {
-        Debug.Log($":: ResetEnemy");
-        transform.position = GameManager.Instance.GameData.GetEnemyPos(this);
+        transform.position = GameController.Instance.GameData.GetEnemyPos(this);
         enemyAnimations.ResetDeathAnim();
-        enemyRb.bodyType = RigidbodyType2D.Dynamic;
+        rb.bodyType = RigidbodyType2D.Dynamic;
         gameObject.SetActive(true);
     }
 }

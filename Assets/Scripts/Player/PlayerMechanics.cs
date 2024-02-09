@@ -61,6 +61,7 @@ public class PlayerMechanics : MonoBehaviour
                 playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce);
                 isInGround = false;
                 playerAnimations.PlayJumpAnim();
+                AudioManager.Instance.PlayerJumpClip();
             }
             else
                 if (jumpTimer < jumpDuration)

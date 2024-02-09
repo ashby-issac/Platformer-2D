@@ -8,7 +8,6 @@ public class PlayerHealth : Health
     [SerializeField] private LayerMask heartsLayer;
 
     private PlayerAnimations playerAnimations;
-    private InputManager inputManager;
     private bool hitObstacle = false;
 
     public static bool IsAlive = false;
@@ -22,16 +21,17 @@ public class PlayerHealth : Health
         base.OnEnable();
         IsAlive = true;
         
-        transform.position = GameManager.Instance.CurrentLevelPlayerPos;
+        transform.position = GameController.Instance.CurrentLevelPlayerPos;
+        AudioManager.Instance.LevelStartAudio();
 
         UIManager.Instance.SetHealthIndex(currentHealth);
         
-        GameManager.Instance.OnGameRestart -= PlayerReset;
+        GameController.Instance.OnGameRestart -= PlayerReset;
         OnPlayerDamaged += UIManager.Instance.ReduceHealthUI;
         EnemyMechanics.OnEnemyAttack += ReduceHealth;
-        GameManager.Instance.OnHealthPickup += AddHealth;
+        GameController.Instance.OnHealthPickup += AddHealth;
 
-        GameManager.Instance.GameData.SetPlayerStartPos(this, transform.position);
+        GameController.Instance.GameData.SetPlayerStartPos(this, transform.position);
     }
 
     new void Start()
@@ -48,6 +48,7 @@ public class PlayerHealth : Health
         if (capsuleCollider.IsTouchingLayers(hazardsLayer) && !hitObstacle)
         {
             ReduceHealth(this);
+            AudioManager.Instance.SpikesClip();
             hitObstacle = true;
         }
         else if (!capsuleCollider.IsTouchingLayers(hazardsLayer))
@@ -56,14 +57,14 @@ public class PlayerHealth : Health
         }
     }
 
-    void OnDisable()
+    new void OnDisable()
     {
         EnemyMechanics.OnEnemyAttack -= ReduceHealth;
         OnPlayerDamaged -= UIManager.Instance.ReduceHealthUI;
 
-        GameManager.Instance.OnGameRestart += PlayerReset;
-        GameManager.Instance.OnLevelComplete += () => gameObject.SetActive(true);
-        GameManager.Instance.OnHealthPickup -= AddHealth;
+        GameController.Instance.OnGameRestart += PlayerReset;
+        GameController.Instance.OnLevelComplete += () => gameObject.SetActive(true);
+        GameController.Instance.OnHealthPickup -= AddHealth;
     }
 
     void AddHealth()
@@ -84,7 +85,8 @@ public class PlayerHealth : Health
             {
                 playerAnimations?.PlayDeathAnim(false);
                 IsAlive = false;
-                GameManager.Instance.OnGamerOver();
+                GameController.Instance.OnGamerOver();
+                rb.bodyType = RigidbodyType2D.Static;
                 Invoke("DisableObj", 3f);
             }
             OnPlayerDamaged?.Invoke(currentHealth, maxHealth);
@@ -93,7 +95,7 @@ public class PlayerHealth : Health
 
     void PlayerReset()
     {
-        gameObject.transform.position = GameManager.Instance.GameData.GetPlayerStartPos(this); 
+        gameObject.transform.position = GameController.Instance.GameData.GetPlayerStartPos(this); 
         gameObject.SetActive(true);
     }
 

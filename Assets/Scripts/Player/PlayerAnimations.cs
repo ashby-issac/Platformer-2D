@@ -6,13 +6,13 @@ public class PlayerAnimations : MonoBehaviour
 
     void OnEnable()
     {
-        if (GameManager.Instance)
-            GameManager.Instance.OnGameRestart -= ResetDeathAnim;
+        if (GameController.Instance)
+            GameController.Instance.OnGameRestart -= ResetDeathAnim;
     }
 
     void OnDisable()
     {
-        GameManager.Instance.OnGameRestart += ResetDeathAnim;
+        GameController.Instance.OnGameRestart += ResetDeathAnim;
     }
 
     void Start()

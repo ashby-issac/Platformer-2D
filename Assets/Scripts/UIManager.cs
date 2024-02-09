@@ -41,12 +41,12 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        restartButton.onClick.AddListener(() => GameManager.Instance.RestartLevel());
-        continueButton.onClick.AddListener(() => GameManager.Instance.OnContinueClicked());
-		GameManager.Instance.OnLevelComplete += () => levelEndPanel.SetActive(false);
+        restartButton.onClick.AddListener(() => GameController.Instance.RestartLevel());
+        continueButton.onClick.AddListener(() => GameController.Instance.OnContinueClicked());
+		GameController.Instance.OnLevelComplete += () => levelEndPanel.SetActive(false);
 
-		GameManager.Instance.OnRestartResetUI += ResetHealthUI;
-		GameManager.Instance.OnRestartResetUI += ResetCollectiblesText;
+		GameController.Instance.OnRestartResetUI += ResetHealthUI;
+		GameController.Instance.OnRestartResetUI += ResetCollectiblesText;
     }
 
     public void ReduceHealthUI(float currentHealth, float maxHealth) => healthContainers[--healthIndex]?.GetChild(0).gameObject.SetActive(false);

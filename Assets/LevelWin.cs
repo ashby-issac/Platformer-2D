@@ -10,6 +10,7 @@ public class LevelWin : MonoBehaviour
         {
             collision.gameObject.SetActive(false);
             UIManager.Instance.ShowLevelEndUI();
+            AudioManager.Instance.WinClip();
         }
     }
 }

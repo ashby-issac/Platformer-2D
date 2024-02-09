@@ -202,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5208fed25b7084db27e85dac93c559, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 9072094280890679636}
 --- !u!114 &7999753482344207510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,11 +215,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d775e803bae44c148b1da30776531ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  capsuleCollider: {fileID: 5212323257487141966}
+  rb: {fileID: 3514291215641161552}
   hazardsLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   maxHealth: 2
   damageHit: 1
+  enemyAnimations: {fileID: 311832916689194519}
 --- !u!1 &5136449403514557260
 GameObject:
   m_ObjectHideFlags: 0
